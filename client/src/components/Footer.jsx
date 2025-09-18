@@ -9,9 +9,9 @@ const Footer = () => {
                 <div className="flex-1 min-w-[220px] mb-6 md:mb-0">
                     <img src={assets.logo} alt="App Logo" className="w-32 sm:w-44" />
                     <p className='max-w-[410px] mt-6'>
-                        BlogMOS &copy; {new Date().getFullYear()}<br />
+                        BlogByU &copy; {new Date().getFullYear()}<br />
                         Your daily dose of blogs and stories.<br />
-                        Contact: info@blogmos.com
+                        Contact: info@BBU.com
                     </p>
                 </div>
 
@@ -19,7 +19,7 @@ const Footer = () => {
                 <div className="flex flex-wrap justify-between w-full gap-5 md:w-[45%]">
                     {footer_data.map((section, index) =>(
                         <div key={index}  >
-                            <h3 className='font-semibold text-base text-gray-900 md:mb-5 mb-2 '>{section.title}</h3>
+                            <h3 className='font-semibold text-base md:mb-5 mb-2 text-white/60 '>{section.title}</h3>
                             <ul className='text-sm space-y-1'>
                                 {section.links.map((link, linkIndex) => (
                                     <li key={linkIndex} className='my-2'>
@@ -31,7 +31,7 @@ const Footer = () => {
                     ))}
                 </div>
             </div>
-            <p className='py-4 text-center text-sm md:text-base text-gray-500/80'>Copyright 2025 &copy; BlogMos - All Rights Reserved</p>
+            <p className='py-4 text-center text-sm md:text-base text-gray-500/80'>Copyright 2025 &copy; BlogByU - All Rights Reserved</p>
         </div>
     );
 }

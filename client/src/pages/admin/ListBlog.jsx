@@ -30,29 +30,29 @@ const ListBlog = () => {
   },[])
 
   return (
-    <div className='flex-1 pt-5 px-5 sm:pt-12 sm:pl-16 bg-blue-50/50'>
+    <div className='flex-1 pt-5 px-5 sm:pt-12 sm:pl-16'>
       <h1>All Blogs</h1>
 
       {/* blogs list */}
-      <div className="h-4/5 relative max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
-        {/* showing blogs in table format */}
-        <table className='w-full text-sm text-gray-500'>
-          <thead className='textxs text-gray-600 text-left uppercase'>
-            <tr>
-              <th scope='col' className='px-2 py-4'>#</th>
-              <th scope='col' className='px-2 py-4'>Blog Title</th>
-              <th scope='col' className='px-2 py-4 max-sm:hidden '>Date</th>
-              <th scope='col' className='px-2 py-4 max-sm:hidden' >Status</th>
-              <th scope='col' className='px-2 py-4'>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {blogs.map((blog, index) => {
-                return <BlogTableItems key={blog._id} blog={blog} fetchBlogs={fetchBlogs} index={index + 1} />
-            })}
-          </tbody>
-        </table>
+      <div className="max-w-4xl shadow rounded-lg scrollbar-hide relative">
+        <div className="overflow-auto h-[75vh]">
+          <table className='w-full text-sm text-gray-500'>
+            <thead className='text-xs text-blue-400 text-left uppercase sticky top-0  bg-black'>
+              <tr>
+                <th scope='col' className='px-2 py-4 w-12'>#</th>
+                <th scope='col' className='px-2 py-4 w-2/5'>Blog Title</th>
+                <th scope='col' className='px-2 py-4 max-sm:hidden w-1/5'>Date</th>
+                <th scope='col' className='px-2 py-4 max-sm:hidden w-1/5'>Status</th>
+                <th scope='col' className='px-2 py-4 w-1/5'>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {blogs.map((blog, index) => (
+                <BlogTableItems key={blog._id} blog={blog} fetchBlogs={fetchBlogs} index={index + 1} />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

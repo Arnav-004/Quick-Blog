@@ -17,7 +17,7 @@ const App = () => {
   const { token } = useAppContext()
 
   return (
-    <div className=''>
+    <div className='bg-black text-white'>
       <Toaster/> {/* Toaster for notifications can be used by any component */}
 
       <Routes>

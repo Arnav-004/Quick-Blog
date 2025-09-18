@@ -98,8 +98,8 @@ const AddBlog = () => {
   },[]) 
 
   return (
-    <form onSubmit={onSubmitHandler}  className='flex-1 bg-blue-50/50 h-full overflow-scroll'>
-      <div className="bg-white w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded">
+    <form onSubmit={onSubmitHandler}  className='flex-1 h-full overflow-scroll'>
+      <div className=" w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded">
 
         <p>Upload thumbnail</p>
         <label htmlFor="image">
@@ -125,11 +125,11 @@ const AddBlog = () => {
 
           {/* AI */}
           {/* button disabled while content is generating */}
-          <button disabled={loading} type="button" onClick={generateContent} className='absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer'>Generate with AI</button>
+          <button disabled={loading} type="button" onClick={generateContent} className='absolute bottom-1 right-2 ml-2 text-xs text-gray-300 bg-gray-800 px-4 py-1.5 rounded hover:underline cursor-pointer'>Generate with AI</button>
         </div>
 
         <p className='mt-4'>Blog category</p>
-        <select onChange={e => setCategory(e.target.value) } name="category" id="" className='mt-2 px-3 py-2 border text-gray-500 border-gray-300 outline-none rounded'>
+        <select onChange={e => setCategory(e.target.value) } name="category" id="" className='mt-2 px-3 py-2 border text-gray-400 border-gray-300 outline-none rounded bg-black'>
           <option value=""> Select category</option>
           {blogCategories.map((category, index) => {
             return <option key={index} value={category}>{category}</option>

@@ -27,7 +27,8 @@ const Layout = () => {
       {/* top bar for admin */}
       <div className='flex items-center justify-between py-2 h-[70px] px-4 sm:px-12 border-b border-gray-200 shadow-md'>
         <img src={assets.logo} onClick={()=> navigate('/')} alt=""  className='w-32 sm:w-40 cursor-pointer'/>
-        <button onClick={logout} className='text-sm px-8 py-2 bg-primary text-white rounded-full cursor-pointer'>Logout</button>
+        <button onClick={logout} 
+          className="flex items-center gap-2 rounded-full text-sm cursor-pointer bg-gradient-to-r from-amber-400 to-orange-500 text-white px-8 py-2 shadow-lg hover:scale-105 transition-transform duration-200">Logout</button>
       </div>
 
       {/* main content area */}
