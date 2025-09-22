@@ -1,39 +1,99 @@
 import jwt from "jsonwebtoken";
 import BlogDB from "../models/Blog.js";
 import CommentDB from "../models/Comment.js";
+import UserDb from '../models/User.js'
+import bcrypt from 'bcryptjs'
 
-export const adminLogin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+
+
+export const signup = async (req, res) => {
+    const { username, email, password } = req.body;
     
-        // Check if the email and password match the admin credentials
-        if (email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD) {
-            return res.status(401).json({success: false, message: "Invalid credentials" });
+    try {
+        // Check if all fields are provided
+        if( !username || !email || !password) {
+            return res.status(400).json({ message: 'All fields are required.' });
         }
 
-        // If credentials are valid, create a JWT token
-        const token = jwt.sign( {email}, process.env.JWT_SECRET);      
-        console.log(token)
-        res.status(200).json({
-            message: "Login successful",
-            success: true,
-            token: token
+        // Check if user already exists
+        const existingUser = await UserDb.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already in use.' });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new user
+        const newUser = await UserDb.create({
+            username,
+            email,
+            password: hashedPassword
         });
 
-    } catch (error) {
-        // Handle any errors that occur during the login process
-        res.status(500).json({ message: "An error occurred during login", error: error.message });
-    }
+        // generate token
+        const token = jwt.sign({ author: newUser._id }, process.env.JWT_SECRET) 
 
-}
+        res.status(201).json({
+            success: true,
+            userData: newUser,
+            token: token, 
+            message: 'Account created successfully.'
+        })
+    } 
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+export const adminLogin = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Check if all fields are provided
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required.' });
+        }
+
+        // Find user by email
+        const user = await UserDb.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid Email.' });
+        }
+
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid Password.' });
+        }
+
+        // Generate token
+        const token = jwt.sign({ author: user._id }, process.env.JWT_SECRET) 
+
+        res.json({
+            success: true,
+            userData: user,
+            token: token,
+            message: 'Login successful.'
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 
 
 
 
 export const getAllBlogsAdmin = async (req, res) => {
+    const authorId = req.author._id
+
     try{
         // Fetch all blogs from the database and sort them by creation date in descending order
-        const blogs = await BlogDB.find({}).sort({ createdAt: -1 })
+        const blogs = await BlogDB.find({blogAuthor: authorId}).sort({ createdAt: -1 })
 
         res.status(200).json({ 
             success: true, 
@@ -52,12 +112,12 @@ export const getAllBlogsAdmin = async (req, res) => {
 
 
 export const getAllComments = async (req, res) => {
+    const authorId = req.author._id
+
     try{
         // Fetch all comments from the database and sort them by creation date in descending order
-        console.log("comments are 1")
-        const comments = await CommentDB.find({}).populate("blog").sort({ createdAt: -1 })
-        console.log("comments are 2")
-        console.log(comments)
+        const comments = await CommentDB.find({blogAuthor: authorId}).populate("blog").sort({ createdAt: -1 })
+
         res.status(200).json({ 
             success: true, 
             comments 
@@ -75,11 +135,13 @@ export const getAllComments = async (req, res) => {
 
 
 export const getDashboard = async (req, res) => {
+    const authorId = req.author._id
+
     try{
-        const recentBlogs = await BlogDB.find({}).sort({createdAt: -1}).limit(5)
-        const blogs = await BlogDB.countDocuments() // Count total number of blogs
-        const comments = await CommentDB.countDocuments() // Count total number of comments
-        const drafts = await BlogDB.countDocuments({ isPublished: false}) // Count total number of unpublished blogs
+        const recentBlogs = await BlogDB.find({blogAuthor: authorId}).sort({createdAt: -1}).limit(5)
+        const blogs = await BlogDB.countDocuments({blogAuthor: authorId}) // Count total number of blogs
+        const comments = await CommentDB.countDocuments({blogAuthor: authorId}) // Count total number of comments
+        const drafts = await BlogDB.countDocuments({blogAuthor: authorId, isPublished: false}) // Count total number of unpublished blogs
 
         const dashboardData = {
             recentBlogs,

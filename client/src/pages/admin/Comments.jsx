@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import CommentTableItems from '../../components/admin/CommentTableItems'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
+import Noblog, { NoComment } from '../../components/admin/Noblog'
 
 const Comments = () => {
 
-  const { axios } = useAppContext()
+  const { axios, display, setdisplay } = useAppContext()
 
   const [ comments, setComments ] = useState([])
   const [ filter, setFilter ] = useState('Not Approved')  // Approved or Not Approved
@@ -13,8 +14,18 @@ const Comments = () => {
    const fetchComments = async () => {
       try {
         const { data } = await axios.get('/api/admin/comments')
+
+        if(data.success){
+          if(data.comments.length === 0 && display == 2) {
+            setdisplay(1)
+          }
+          else if(data.comments.length != 0 && display != 2) {
+            setdisplay(2)
+          }
+          setComments(data.comments)
+        }
+        else  toast.error(data.message)
         
-        data.success ? setComments(data.comments) : toast.error(data.message)
       } catch (error) {
         toast.error(error.message)
       }
@@ -26,6 +37,7 @@ const Comments = () => {
     },[])
 
   return (
+    display < 2 ? <NoComment/> :
     <div className='flex-1 pt-5 px-5 sm:pt-12 sm:pl-16 '>
       <div className="flex justify-between items-center max-w-3xl">
         <h1>Comments</h1>

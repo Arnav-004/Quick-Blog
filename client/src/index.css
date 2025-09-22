@@ -17,28 +17,28 @@
   custom styles for rich text content
   this is used to define the text content of the data in the blog page
 */
-.rich-text { font-size: 15px;  }
+.rich-text { font-size: 15px; color: #EDEDED; }
 
-.rich-text p { margin-bottom: 16px; color: #ffffff; }
+.rich-text p { margin-bottom: 16px; color: #CCCCCC; }
 
-.rich-text h1 { font-size: 36px; font-weight: 700; color: #ffffff !important; margin: 32px 0; }
+.rich-text h1 { font-size: 36px; font-weight: 700; color: #FFFFFF !important; margin: 32px 0; }
 
-.rich-text h2 { font-size: 22px; font-weight: 700; color: #ffffff !important; margin: 24px 0; }
+.rich-text h2 { font-size: 22px; font-weight: 700; color: #F3F3F3 !important; margin: 24px 0; }
 
-.rich-text h3 { font-size: 18px; font-weight: 600; color: #ffffff !important; margin: 20px 0; }
+.rich-text h3 { font-size: 18px; font-weight: 600; color: #E0E0E0 !important; margin: 20px 0; }
 
-.rich-text h4 { font-size: 16px; font-weight: 500; color: #ffffff !important; margin: 16px 0; }
+.rich-text h4 { font-size: 16px; font-weight: 500; color: #CCCCCC !important; margin: 16px 0; }
 
-.rich-text h5 { font-size: 14px; font-weight: 400; color: #ffffff !important; margin: 12px 0; }
+.rich-text h5 { font-size: 14px; font-weight: 400; color: #BBBBBB !important; margin: 12px 0; }
 
-.rich-text h6 { font-size: 12px; font-weight: 400; color: #ffffff !important; margin: 8px 0; }
+.rich-text h6 { font-size: 12px; font-weight: 400; color: #AAAAAA !important; margin: 8px 0; }
 
-.rich-text strong { font-weight: 700; color: #ebebeb !important;}
+.rich-text strong { font-weight: 700; color: #FFFFFF; }
 
 .rich-text ol { margin-left: 30px; list-style-type: decimal; }
 
 .rich-text ul { margin-left: 30px; list-style-type: disc; }
 
-.rich-text li { margin-bottom: 8px; }
+.rich-text li { margin-bottom: 8px; color: #CCCCCC; }
 
-.rich-text a { color: #007AFF }
+.rich-text a { color: #4FC3F7 }

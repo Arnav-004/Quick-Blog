@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { data, useParams } from 'react-router-dom'
 import { assets, blog_data, comments_data } from '../assets/assets'
 import Navbar from '../components/Navbar'
 import Moment from 'moment'
@@ -14,7 +14,8 @@ const Blog = () => {
 
   const { id } = useParams()  // id passed in parameters id of the required/ selected blog
 
-  const [ data , setData ] = useState(null)  // blog data
+  const [ blogdata , setData ] = useState(null)  // blog data
+  // const [ author , setauthor ] = useState(null)  // blog data
   const [ comments , setComments ] = useState([])  // blog comments
   
   // for added comments
@@ -66,8 +67,8 @@ const Blog = () => {
   const addComment = async (e) => {
     e.preventDefault()
     try{
-      const { data } = await axios.post('/api/blog/add-comment', { blog: id, name, content })
-
+      const { data } = await axios.post('/api/blog/add-comment', { blog: id, name, content, author: blogdata.blogAuthor })
+      
       if(data.success){
         toast.success(data.message)
         setName('')
@@ -83,7 +84,7 @@ const Blog = () => {
 
 
   // if data is selected it is shown else loding is shown
-  return data ? (
+  return blogdata ? (
     <div className='relative'>
 
       <Navbar/>
@@ -91,21 +92,21 @@ const Blog = () => {
       {/* top part of blog */}
       <div className='text-center mt-20 text-gray-400'>
         {/* use moment package to display date in required format */}
-        <p className='text-primary py-4 font-medium'>Published on {Moment(data.createdAt).format('MMMM Do YYYY')}</p>
-        <h1 className='text-2xl sm:text-5xl font-semibold max-w-2xl mx-auto text-white'> {data.title} </h1>
-        <h2 className='my-5 max-w-lg truncate mx-auto'> {data.subTitle} </h2>
-        <h2 className='inline-block py-1 px-4 rounded-full mb-6 border text-sm border-primary/35 bg-primary/5 font-medium text-primary'> Ardigimbo Drikatlos </h2>
+        <p className='text-primary py-4 font-medium'>Published on {Moment(blogdata.createdAt).format('MMMM Do YYYY')}</p>
+        <h1 className='text-2xl sm:text-5xl font-semibold max-w-2xl mx-auto text-white'> {blogdata.title} </h1>
+        <h2 className='my-5 max-w-lg truncate mx-auto'> {blogdata.subTitle} </h2>
+        <h2 className='inline-block py-1 px-4 rounded-full mb-6 border text-sm border-primary/35 bg-primary/20 font-medium text-primary'> {blogdata.username} </h2>
       </div>
 
 
-      {/* main blog data */}
+      {/* main blog blogdata */}
       <div className='mx-5 max-w-5xl md:mx-auto my-10 mt-6'>
         {/* blog image */}
-        <img src={data.image} alt="" className='rounded-3xl mb-5'/>
+        <img src={blogdata.image} alt="" className='rounded-3xl mb-5'/>
 
         {/* blog description */}
         {/* rich-text is custom css defined in index.css */}
-        <div className=' rich-text max-w-3xl mx-auto' dangerouslySetInnerHTML={{__html: data.description}}></div>
+        <div className=' rich-text max-w-3xl mx-auto' dangerouslySetInnerHTML={{__html: blogdata.description}}></div>
 
         {/* Comments Section */}
         <div className='mt-40 mb-10 max-w-3xl mx-auto text-gray-300'>

@@ -12,13 +12,41 @@ import 'quill/dist/quill.snow.css'; // Import Quill styles
 import { Toaster } from 'react-hot-toast' // Import Toaster for notifications
 import { useAppContext } from './context/AppContext'
 
+
 const App = () => {
 
   const { token } = useAppContext()
 
   return (
     <div className='bg-black text-white'>
-      <Toaster/> {/* Toaster for notifications can be used by any component */}
+      {/* <Toaster/> Toaster for notifications can be used by any component */}
+
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#222',
+            color: '#fff',
+            fontSize: '1rem',
+            borderRadius: '8px',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.15)'
+          },
+          success: {
+            icon: '✅',
+            style: {
+              background: '#22c55e',
+              color: '#fff',
+            },
+          },
+          error: {
+            icon: '❌',
+            style: {
+              background: '#ef4444',
+              color: '#fff',
+            },
+          },
+        }}
+      />
 
       <Routes>
 

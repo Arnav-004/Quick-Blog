@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { assets, dashboard_data } from '../../assets/assets'
+import { useEffect, useState } from 'react'
 import BlogTableItems from '../../components/admin/BlogTableItems'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
+import { assets } from '../../assets/assets.js'
+import Noblog from '../../components/admin/Noblog.jsx'
 
 const Dashboard = () => {
 
-  const { axios } = useAppContext()
+  const { axios, display, setdisplay } = useAppContext()
 
   const [ dashboardData, setDashboardData ] = useState({
     blogs: 0,
@@ -17,11 +18,21 @@ const Dashboard = () => {
 
   // fetch dashboard data from the server
   const fetchDashboardData = async () => {
-    try{
-      const { data } = await axios.get('/api/admin/dashboard')
-      
-      data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
-    }catch (error) {
+    try {
+      // Send user id in request (as query param or header)
+      const { data } = await axios.get('/api/admin/dashboard');
+
+      if(data.success){
+        if(data.dashboardData.blogs === 0 && display != 0) {
+          setdisplay(0)
+        }
+        else if(data.dashboardData.blogs != 0 && display == 0) {
+          setdisplay(1)
+        }
+        setDashboardData(data.dashboardData)
+      }
+      else  toast.error(data.message)
+    } catch (error) {
       toast.error(error.message)
     }
   }
@@ -32,6 +43,7 @@ const Dashboard = () => {
   }, [])
 
   return (
+    display == 0 ? <Noblog/> :
     <div className='flex-1 p-4 md:p-10'>
 
       {/* top cards of dashboard */}
@@ -60,7 +72,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
+      
+      
       {/* list in the dashboard */}
       <div className="">
         {/* heading */}
@@ -93,6 +106,7 @@ const Dashboard = () => {
       </div>
       
     </div>
+    
   )
 }
 

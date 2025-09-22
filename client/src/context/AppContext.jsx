@@ -15,6 +15,8 @@ export const AppProvider = ({ children }) => {
     const [ token, setToken ] = useState(null)
     const [ blogs, setBlogs ] = useState([])
     const [ input, setInput ] = useState("")
+    const [ type,  setType  ] = useState("Login")
+    const [ display,   setdisplay   ] = useState(0) // 0 -> no blog no comment, 1 -> blog no comment, 2 -> blog and comment
 
     const fetchBlogs = async () => {
         try{
@@ -49,6 +51,10 @@ export const AppProvider = ({ children }) => {
         setBlogs,
         input,
         setInput,
+        type,
+        setType,
+        display,
+        setdisplay,
     }
 
     return (

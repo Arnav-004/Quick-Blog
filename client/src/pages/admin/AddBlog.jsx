@@ -3,7 +3,7 @@ import { assets, blogCategories } from '../../assets/assets'
 import Quill from 'quill'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
-import { parse } from 'marked'   // to parse markdown content to HTML 
+import { parse, marked } from 'marked'   // to parse markdown content to HTML 
 
 const AddBlog = () => {
 
@@ -30,12 +30,17 @@ const AddBlog = () => {
       setLoading(true)
 
       // sending title as prompt to ai
-      const { data } = await axios.post('/api/blog/generate', { prompt: title })
+      // configure once (at top of file)
+      marked.setOptions({
+        breaks: true, // keep line breaks
+        gfm: true     // GitHub-flavored markdown (lists, bold, etc.)
+      });
 
-      if(data.success){
-        // display the generated content
-        // to use parse function we need to install marked package
-        quillRef.current.root.innerHTML = parse(data.content)
+      const { data } = await axios.post('/api/blog/generate', { prompt: title });
+
+      if (data.success) {
+        const htmlContent = marked.parse(data.content); 
+        quillRef.current.clipboard.dangerouslyPasteHTML(htmlContent);
       }
       else{
         toast.error(data.message)
@@ -68,9 +73,8 @@ const AddBlog = () => {
       formData.append('blog', JSON.stringify(blog))
       formData.append('image', image)
 
-      // console.log(formData)
       const { data } = await axios.post('/api/blog/add', formData)
-      console.log(data)
+      
       if(data.success){
         toast.success(data.message)
         setImage(false)
@@ -99,7 +103,7 @@ const AddBlog = () => {
 
   return (
     <form onSubmit={onSubmitHandler}  className='flex-1 h-full overflow-scroll'>
-      <div className=" w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded">
+      <div className=" w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded ">
 
         <p>Upload thumbnail</p>
         <label htmlFor="image">
@@ -128,15 +132,15 @@ const AddBlog = () => {
           <button disabled={loading} type="button" onClick={generateContent} className='absolute bottom-1 right-2 ml-2 text-xs text-gray-300 bg-gray-800 px-4 py-1.5 rounded hover:underline cursor-pointer'>Generate with AI</button>
         </div>
 
-        <p className='mt-4'>Blog category</p>
-        <select onChange={e => setCategory(e.target.value) } name="category" id="" className='mt-2 px-3 py-2 border text-gray-400 border-gray-300 outline-none rounded bg-black'>
+        <p className='mt-4 '>Blog category</p>
+        <select onChange={e => setCategory(e.target.value) } name="category" id="" className='mt-2 px-3 py-2 border text-gray-400 border-gray-300 outline-none rounded bg-black '>
           <option value=""> Select category</option>
           {blogCategories.map((category, index) => {
             return <option key={index} value={category}>{category}</option>
           })}
         </select>
 
-        <div className='flex gap-2 mt-4'>
+        <div className='flex gap-2 mt-4 '>
           <p>Publish Now</p>
           <input type="checkbox" checked={isPublished} id="" onChange={e => setIsPublished(e.target.checked)}  className='scale-125 cursor-pointer'/>
         </div>

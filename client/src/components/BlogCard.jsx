@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 const BlogCard = ({blog }) => {
 
     // contents of the blog to be shown in this card
-    const { title, description, image, category, _id } = blog;
+    const { title, image, category, _id } = blog;
 
     const navigate = useNavigate()
 
@@ -17,9 +17,8 @@ return (
     >
         {/* display the blog */}
         <img src={image} alt="" className="aspect-video" />
-        <span className="ml-5 mt-4 px-3 py-1 inline-block bg-primary/20 rounded-full text-primary text-xs">
-            {category}
-        </span>
+        <span className="ml-5 mt-4 px-3 py-1 inline-block bg-primary/20 rounded-full text-primary text-xs"> {category} </span>
+        <span className="ml-5 mt-4 px-3 py-1 inline-block bg-primary/20 rounded-full text-primary text-xs"> {blog.username} </span>
     <div className="p-3">
             <h5 className="mb-2 font-medium text-white">{title}</h5>
         </div>

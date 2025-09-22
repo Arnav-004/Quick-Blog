@@ -55,7 +55,7 @@ const Bloglist = () => {
                             // Remove HTML tags and split by line or sentence
                             const plain = shortDesc.replace(/<[^>]+>/g, '');
                             const lines = plain.split(/\n|\r|\.|\!|\?/).filter(Boolean);
-                            shortDesc = lines.slice(0, 15).join('. ') + (lines.length > 15 ? '...' : '');
+                            shortDesc = lines.slice(0, 8).join('. ') + (lines.length > 8 ? '...' : '');
                         }
                         return (
                             <div

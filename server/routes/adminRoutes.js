@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { adminLogin, approveCommentById, deleteCommentById, getAllBlogsAdmin, getAllComments, getDashboard } from '../controllers/adminController.js'
+import { adminLogin, signup, approveCommentById, deleteCommentById, getAllBlogsAdmin, getAllComments, getDashboard } from '../controllers/adminController.js'
 import authenticate from '../middlewares/auth.js'
 
 // create a new router instance
@@ -7,6 +7,7 @@ const adminRouter = Router()
 
 
 adminRouter.post('/login', adminLogin)
+adminRouter.post('/signup', signup)
 adminRouter.get('/comments', authenticate, getAllComments)
 adminRouter.get('/blogs', authenticate, getAllBlogsAdmin)
 adminRouter.post('/delete-comments', authenticate, deleteCommentById)

@@ -20,9 +20,9 @@ const Header = () => {
   return (
     <div className='mx-8 sm:mx-16 xl:mx-24 relative'>
         <div className='text-center mt-20 mb-8'>
-            <div className='inline-flex items-center justify-center gap-4 px-6 py-1.5 mb-4 border border-primary/40 bg-primary/30 rounded-full text-sm text-primary'>
-                <p>New: AI feature intigrated</p>
-                <img src={assets.star_icon} alt="" className='w-2.5'/>
+            <div className="inline-flex items-center gap-3 px-7 py-2 mb-6 border-2 border-primary shadow-lg rounded-full text-base font-semibold text-primary animate-bounce">
+                <img src={assets.star_icon} alt="AI" className="w-4 h-4" />
+                <span>✨ New: AI feature integrated</span>
             </div>
 
             <h1 className='text-3xl sm:text-6xl font-semibold sm:leading-16'>
@@ -35,15 +35,15 @@ const Header = () => {
             </p>
 
             {/* create home page form */}
-            <form onSubmit={onSubmitHandler}  className='flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-600 bg-primary/50 overflow-hidden rounded-2xl' >
-                <input ref={inputRef} type="text" placeholder='Search for blogs' required className='w-full pl-4 outline-none text-white '/>
-                <button type="submit" className='bg-gray-600 text-white px-8 py-2 m-1.5 rounded-2xl hover:scale-105 transition-all cursor-pointer'>Search</button>
+            <form onSubmit={onSubmitHandler} className="flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-primary/40 bg-gray-800/80 overflow-hidden rounded-2xl shadow-lg">
+                <input ref={inputRef} type="text" placeholder="Search for blogs" required className="w-full pl-4 outline-none text-white bg-transparent placeholder-gray-400" />
+                <button type="submit" className="bg-primary text-white px-8 py-2 m-1.5 rounded-2xl hover:bg-blue-700 hover:scale-105 transition-all cursor-pointer font-semibold shadow">Search</button>
             </form>
         </div>
 
         {/* clear search button */}
-        <div className='text-center'>
-            { input && <button onClick={onClear} className='border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer'>Clear Search</button> }
+        <div className="text-center">
+            {input && <button onClick={onClear} className="border border-primary/40 bg-gray-900/80 text-primary font-light text-xs py-1 px-3 rounded-full shadow-custom-sm cursor-pointer hover:bg-primary/10 transition-all">Clear Search</button>}
         </div>
 
         {/* home me bg img */}

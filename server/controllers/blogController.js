@@ -17,7 +17,6 @@ export const addBlog = async (req, res) => {
         }
 
         const fileBuffer = fs.readFileSync(imageFile.path);
-        console.log("File buffer created successfully");
 
         // upload the image to ImageKit
         const response = await imagekit.upload({
@@ -44,7 +43,9 @@ export const addBlog = async (req, res) => {
             description,
             category,
             image: optimizedImageUrl, // Store the optimized image URL
-            isPublished         
+            isPublished,
+            blogAuthor: req.author._id, // Associate blog with user
+            username: req.author.username
         })
 
         res.status(201).json({ 
@@ -106,21 +107,26 @@ export const getBlogById = async (req, res) => {
 
 
 export const deleteBlogById = async (req, res) => {
-    try{
-        const { id } = req.body
-        await BlogDB.findByIdAndDelete(id)
+    const authorId = req.author;
+    try {
+        const { id } = req.body;
+        // Only allow deleting blogs owned by the user
+        const blog = await BlogDB.findOne({ _id: id, blogAuthor: authorId });
+        if (!blog) {
+            return res.status(403).json({ success: false, message: "Not authorized to delete this blog." });
+        }
+        await BlogDB.findByIdAndDelete(id);
         // delete all comments associated with the blog
-        await CommentDB.deleteMany({ blog: id })
-
-        res.status(200).json({ 
-            success: true, 
-            message: "Blog deleted successfully", 
+        await CommentDB.deleteMany({ blog: id });
+        res.status(200).json({
+            success: true,
+            message: "Blog deleted successfully",
         });
-    }catch(err) {
-        res.status(500).json({ 
-            success: false, 
-            message: "An error occurred while deleting the blog", 
-            error: err.message 
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while deleting the blog",
+            error: err.message
         });
     }
 }
@@ -128,21 +134,25 @@ export const deleteBlogById = async (req, res) => {
 
 
 export const togglePublish = async (req, res) => {
-    try{
-        const { id } = req.body
-        const blog = await BlogDB.findById(id)
-        blog.isPublished = !blog.isPublished 
-        blog.save()
-
-        res.status(200).json({ 
-            success: true, 
-            message: "Blog's status updated'", 
+    const authorId = req.author;
+    try {
+        const { id } = req.body;
+        // Only allow toggling publish status for user's own blog
+        const blog = await BlogDB.findOne({ _id: id, blogAuthor: authorId });
+        if (!blog) {
+            return res.status(403).json({ success: false, message: "Not authorized to update this blog." });
+        }
+        blog.isPublished = !blog.isPublished;
+        await blog.save();
+        res.status(200).json({
+            success: true,
+            message: "Blog's status updated'",
         });
-    }catch(err) {
-        res.status(500).json({ 
-            success: false, 
-            message: "An error occurred while updatind blog's status", 
-            error: err.message 
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while updating blog's status",
+            error: err.message
         });
     }
 }
@@ -151,25 +161,23 @@ export const togglePublish = async (req, res) => {
 
 
 export const addComment = async (req, res) => {
-    try{
-        const { blog, name, content } = req.body
-
+    try {
+        const { blog, name, content, author } = req.body;
         await CommentDB.create({
             blog,
             name,
-            content
-        })
-
-        res.status(201).json({ 
-            success: true, 
-            message: "Comment added for review" 
+            content,
+            blogAuthor: author // Associate comment with user
         });
-
-    }catch(err) {
-        res.status(500).json({ 
-            success: false, 
-            message: "An error occurred while adding comment", 
-            error: err.message 
+        res.status(201).json({
+            success: true,
+            message: "Comment added for review"
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while adding comment",
+            error: err.message
         });
     }
 }

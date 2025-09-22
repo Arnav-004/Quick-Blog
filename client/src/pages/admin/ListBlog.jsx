@@ -3,16 +3,28 @@ import { blog_data } from '../../assets/assets'
 import BlogTableItems from '../../components/admin/BlogTableItems'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
+import Noblog from '../../components/admin/Noblog'
 
 const ListBlog = () => {
 
   const [blogs, setBlogs] = useState([])   
 
-  const { axios } = useAppContext() 
+  const { axios, display, setdisplay } = useAppContext() 
 
   const fetchBlogs = async () => {
     try {
       const { data } = await axios.get('/api/admin/blogs')
+
+      if(data.success){
+        if(data.blogs.length === 0 && display != 0) {
+          setdisplay(0)
+        }
+        else if(data.blogs.length != 0 && display == 0) {
+          setdisplay(1)
+        }
+        setBlogs(data.blogs)
+      }
+      else  toast.error(data.message)
 
       if(data.success) {
         setBlogs(data.blogs)
@@ -30,6 +42,7 @@ const ListBlog = () => {
   },[])
 
   return (
+    display == 0 ? <Noblog/> :
     <div className='flex-1 pt-5 px-5 sm:pt-12 sm:pl-16'>
       <h1>All Blogs</h1>
 

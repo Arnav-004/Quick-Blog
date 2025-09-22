@@ -33,7 +33,7 @@ async function start_server() {
         // when connected to the database, log a message
         mongoose.connection.on('connected', () => console.log("Database connected Succesfully"))
         // connection to MongoDB
-        await mongoose.connect(process.env.MONGO_URI + "BlogMos")
+        await mongoose.connect(process.env.MONGO_URI + "BlogbyU")
         app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`)
         })  
